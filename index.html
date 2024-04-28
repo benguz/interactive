@@ -42,9 +42,6 @@
             width: 98%;
         }
 
-        #loadFenButton {
-            margin-left: 0px;
-        }
         .functions {
             width: 50%;
             padding-left: 2em;
@@ -52,10 +49,28 @@
         }
         .board-container {
             width: 50%; 
-            margin: auto; 
             margin-top: 20px; 
+            padding-left: 2em;
+
             
         }
+        textarea {
+   
+    height: 100px;  
+    width: 95%;       
+    padding: 5px;
+    box-sizing: border-box; 
+    border: 1px solid #ccc; 
+    border-radius: 4px;
+    resize: none;          
+    outline: none;          
+    transition: border-color 0.2s, box-shadow 0.2s; 
+}
+
+textarea:focus {
+    border-color: #0056b3;   /* Change border color on focus */
+    box-shadow: 0 0 8px rgba(0, 86, 179, 0.25); /* Subtle shadow on focus */
+}
         @media screen and (max-width: 720px) {
             body {
                 flex-direction: column;
@@ -83,17 +98,19 @@
         <h2 style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty;">Make a one-minute voice recording and upload below</h2>
         <div style="width: min-content; display: flex; flex-direction: row; align-items: center; justify-content: center; background-color: white; border-radius: 4px; padding: 6px;             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15); ">
             <input type="file" id="audioInput" accept=".wav, .mp3" style="margin-left: 6px;">
-            <button style="align-self: baseline; vertical-align: middle; margin: 6px;" onclick="uploadAudio()">Upload</button>            
+            <button style="align-self: baseline; vertical-align: middle; margin: 6px;" onclick="uploadAudio()">Upload</button>     
+            <div id="loadingUpload" style="display: none; text-align: left; font-size: 10pt; color: grey">Loading</div>
+       
         </div>
         <p style="color: grey; font-size: 10pt">say anything, but talk for the full minute - this trains an AI to speak like you</p>
     </div>
     
-    <div class="board-container" style="display: none;" id="next-steps">
-        <div id="board" style="width: 500px; max-width: 100%; margin: auto;">
+    <div class="board-container"  id="next-steps" style="display: none">
+    <p style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty;">Enter anything - you'll hear your voice read it.</p>
             <textarea id="text-to-speech" placeholder="your text here"></textarea>
-            <button onclick="submitText()">Submit</button> 
+            <button onclick="submitText()" style="margin-left: 0">Submit</button> 
+            <div id="loading" style="display: none; text-align: left; font-size: 10pt; color: grey">Loading</div>
             <audio style="display: none;" id="audioPlayer" controls></audio>           
-        </div>
     </div>
 
     <script>
@@ -106,30 +123,35 @@
                 alert('Please select a file.');
                 return;
             }
-
-            // Create FormData and append the file
+            const loadingDiv = document.getElementById('loadingUpload');
+            loadingDiv.style.display = "block";
+            let dots = 0;
+            const intervalId = setInterval(() => {
+                dots = (dots % 3) + 1;
+                loadingDiv.textContent = `Loading${'.'.repeat(dots)}`;
+            }, 500);
             const formData = new FormData();
             formData.append('audio', file);
 
-            // Fetch request to the API endpoint
             fetch('https://ai.fix.school/create_voice', {
                 method: 'POST',
                 body: formData,
             })
             .then(response => {
                 if (!response.ok) {
-                    // If the server response was not ok, throw an error
                     return response.text().then(text => {
                         throw new Error('Network response was not ok: ' + text);
                     });
                 }
-                return response.json(); // Process the response as JSON if it's OK
+                return response.json(); 
             })
             .then(data => {
-                // Assuming the JSON object has a property 'voice_id'
+                clearInterval(intervalId);
+                loadingDiv.style.display = 'none';
+
                 if (data.voice_id) {
                     console.log(data.voice_id);
-                    localStorage.setItem("voiceId", data.voice_id); // Store the voice_id in localStorage
+                    localStorage.setItem("voiceId", data.voice_id);
                     document.getElementById("next-steps").style.display = "block"                 
                 } else {
                     throw new Error('voice_id not found in the response');
@@ -137,23 +159,30 @@
             })
             .catch(error => {
                 console.error('Error:', error);
+                loadingDiv.style.display = 'none';
                 alert('An error occurred while uploading the file.');
             });
         }
         function submitText() {
             const textInput = document.getElementById('text-to-speech').value;
             let voice_id = localStorage.getItem("voiceId") || "1phcQr0yHM1gzhGNly0b";
+            const loadingDiv = document.getElementById('loading');
+            loadingDiv.style.display = "block";
+            let dots = 0;
+            const intervalId = setInterval(() => {
+                dots = (dots % 3) + 1;
+                loadingDiv.textContent = `Loading${'.'.repeat(dots)}`;
+            }, 500);
 
-            console.log(voice_id)
             const formData = JSON.stringify({
                 text: textInput,
                 id: voice_id
             });     
-            // Fetch request to the API endpoint
+
             fetch('https://ai.fix.school/voice_generate', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'  // Make sure to set Content-Type to application/json
+                    'Content-Type': 'application/json'  
                 },
                 body: formData,
             })
@@ -161,20 +190,22 @@
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.blob(); // Process the response as Blob if it's OK
+                return response.blob(); 
             })
             .then(blob => {
                 const url = URL.createObjectURL(blob);
-                // Assuming you have an HTML audio element with id 'audioPlayer'
                 const audioPlayer = document.getElementById('audioPlayer');
-                
+                clearInterval(intervalId);
+                loadingDiv.style.display = 'none';
                 audioPlayer.src = url;
-                audioPlayer.load(); // Load the audio file into the player
+                audioPlayer.load(); 
                 audioPlayer.style.display = "block";
                 audioPlayer.play();   
             })
             .catch(error => {
                 console.error('Error:', error);
+                loadingDiv.style.display = 'none';
+
                 alert('An error occurred while uploading the file.');
             });
         }
