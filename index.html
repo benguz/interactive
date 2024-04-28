@@ -142,10 +142,8 @@
         }
         function submitText() {
             const textInput = document.getElementById('text-to-speech').value;
-            let voice_id = localStorage.getItem("voiceId");
-            if (!voice_id) {
-                voice_id = "1phcQr0yHM1gzhGNly0b"
-            }
+            let voice_id = localStorage.getItem("voiceId") || "1phcQr0yHM1gzhGNly0b";
+
             console.log(voice_id)
             const formData = JSON.stringify({
                 text: textInput,
