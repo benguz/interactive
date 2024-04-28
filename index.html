@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI & Music, Reese & Ben</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'inter', sans-serif;
+        }
+        body {
+            display: flex;
+            /* flex-direction: row; */
+            flex-direction: column;
+
+        }
+        button {
+            padding: 0.5em;
+            background-color: rgba(120, 183, 220, 0.6);
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+            margin: 6px;
+            margin-bottom: 2px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: rgba(120, 183, 220, 1);
+            cursor: pointer;
+        }
+        input[type="text"] {
+            border: 2px solid #ccc; 
+            padding: 8px; 
+            border-radius: 4px;
+            margin: auto; max-width: 100%;
+            width: 98%;
+        }
+
+        #loadFenButton {
+            margin-left: 0px;
+        }
+        .functions {
+            width: 50%;
+            padding-left: 2em;
+            padding-top: 1em;
+        }
+        .board-container {
+            width: 50%; 
+            margin: auto; 
+            margin-top: 20px; 
+            
+        }
+        @media screen and (max-width: 720px) {
+            body {
+                flex-direction: column;
+                
+            }
+            .functions {
+                width: 98%;
+                padding: 0;
+                margin: auto;
+            }
+            .board-container {
+                width: 98%;
+                max-width: 100%;
+            }
+            #fenInput {
+                width: 90%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="functions">
+        <h1 style="margin-bottom: 6px; text-wrap: balance;">Voice cloning is real for all of us. How would it make you feel? </h1>
+        <h2 style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty;">Make a one-minute voice recording and upload below</h2>
+        <div style="width: min-content; display: flex; flex-direction: row; align-items: center; justify-content: center; background-color: white; border-radius: 4px; padding: 6px;             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15); ">
+            <input type="file" id="audioInput" accept=".wav, .mp3" style="margin-left: 6px;">
+            <button style="align-self: baseline; vertical-align: middle; margin: 6px;" onclick="uploadAudio()">Upload</button>            
+        </div>
+        <p style="color: grey; font-size: 10pt">say anything, but talk for the full minute - this trains an AI to speak like you</p>
+    </div>
+    
+    <div class="board-container" style="display: none;" id="next-steps">
+        <div id="board" style="width: 500px; max-width: 100%; margin: auto;">
+            <textarea id="text-to-speech" placeholder="your text here"></textarea>
+            <button onclick="submitText()">Submit</button> 
+            <audio style="display: none;" id="audioPlayer" controls></audio>           
+        </div>
+    </div>
+
+    <script>
+        
+        function uploadAudio() {
+            const fileInput = document.getElementById('audioInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file.');
+                return;
+            }
+
+            // Create FormData and append the file
+            const formData = new FormData();
+            formData.append('audio', file);
+
+            // Fetch request to the API endpoint
+            fetch('https://ai.fix.school/create_voice', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (!response.ok) {
+                    // If the server response was not ok, throw an error
+                    return response.text().then(text => {
+                        throw new Error('Network response was not ok: ' + text);
+                    });
+                }
+                return response.json(); // Process the response as JSON if it's OK
+            })
+            .then(data => {
+                // Assuming the JSON object has a property 'voice_id'
+                if (data.voice_id) {
+                    console.log(data.voice_id);
+                    localStorage.setItem("voiceId", data.voice_id); // Store the voice_id in localStorage
+                    document.getElementById("next-steps").style.display = "block"                 
+                } else {
+                    throw new Error('voice_id not found in the response');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while uploading the file.');
+            });
+        }
+        function submitText() {
+            const textInput = document.getElementById('text-to-speech').value;
+            let voice_id = localStorage.getItem("voiceId");
+            if (!voice_id) {
+                voice_id = "1phcQr0yHM1gzhGNly0b"
+            }
+            console.log(voice_id)
+            const formData = JSON.stringify({
+                text: textInput,
+                id: voice_id
+            });     
+            // Fetch request to the API endpoint
+            fetch('https://ai.fix.school/voice_generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Make sure to set Content-Type to application/json
+                },
+                body: formData,
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob(); // Process the response as Blob if it's OK
+            })
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                // Assuming you have an HTML audio element with id 'audioPlayer'
+                const audioPlayer = document.getElementById('audioPlayer');
+                
+                audioPlayer.src = url;
+                audioPlayer.load(); // Load the audio file into the player
+                audioPlayer.style.display = "block";
+                audioPlayer.play();   
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while uploading the file.');
+            });
+        }
+    </script>
+</body>
+</html>
