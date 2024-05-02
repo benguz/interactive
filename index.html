@@ -108,10 +108,36 @@ textarea:focus {
     <div class="board-container"  id="next-steps" style="display: none">
     <p style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty;">Enter anything - you'll hear your voice read it.</p>
             <textarea id="text-to-speech" placeholder="your text here"></textarea>
-            <button onclick="submitText()" style="margin-left: 0">Submit</button> 
+            <button onclick="submitText(document.getElementById('text-to-speech').value)" style="margin-left: 0">Submit</button> 
             <div id="loading" style="display: none; text-align: left; font-size: 10pt; color: grey">Loading</div>
-            <audio style="display: none;" id="audioPlayer" controls></audio>           
+            <br><audio style="display: none;" id="audioPlayer" controls></audio>           
     </div>
+    <br>
+    <div  class="board-container"  id="danger-step" style="display: none">
+        <p style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty;">This time, we choose what your voice will say. Don't worry - it'll be light, uncontroversial, and we never see or save the result.</p>
+        <p style="color: grey; font-size: 10pt; margin-top: 0;">this is a fraction of the risk this technology has for music.</p>
+
+        <button onclick="submitText('I love my little pony! It is such a good show!')" style="margin-left: 0">Generate new text</button> 
+        <div id="loading2" style="display: none; text-align: left; font-size: 10pt; color: grey">Loading</div>
+
+        <br><audio style="display: none;" id="audioPlayer2" controls></audio>  
+        <br><br><br><br>
+    </div>
+    <div  class="board-container"  id="taylor-step" style="display: none">
+        <p style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty;">Ever wondered what you sound like singing taylor swift? </p>
+        <p style="color: grey; font-size: 10pt; margin-top: 0">Optionally, you can re-record a more musical version of your voice (singing for a minute) to get better results. Scroll back up, select a new file, hit upload, and come back here!</p>
+
+        <button onclick="playTaylor()" style="margin-left: 0">Sing '22'</button> 
+        <div id="loadingTaylor" style="display: none; text-align: left; font-size: 10pt; color: grey">Loading</div>
+
+        <br><audio style="display: none;" id="audioPlayer3" controls></audio>  
+        <br><br><br><br>
+    </div>
+    <div id="reflection">
+        <p style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty;">How did this experience make you feel?<br>Empowering? Frightening? This cost us a fraction of a cent to set up. You could've uploaded Kanye's voice, your friend's voice, anyone's voice... and made them say anything.</p>
+
+    </div>
+
 
     <script>
         
@@ -163,10 +189,60 @@ textarea:focus {
                 alert('An error occurred while uploading the file.');
             });
         }
-        function submitText() {
-            const textInput = document.getElementById('text-to-speech').value;
+        function playTaylor() {
             let voice_id = localStorage.getItem("voiceId") || "1phcQr0yHM1gzhGNly0b";
-            const loadingDiv = document.getElementById('loading');
+            let loadingDiv = document.getElementById('loadingTaylor');
+
+            loadingDiv.style.display = "block";
+            let dots = 0;
+            const intervalId = setInterval(() => {
+                dots = (dots % 3) + 1;
+                loadingDiv.textContent = `Loading${'.'.repeat(dots)}`;
+            }, 500);
+
+            
+            const formData = JSON.stringify({
+                id: voice_id
+            });     
+            
+            fetch('https://ai.fix.school/taylor', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  
+                },
+                body: formData,
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob(); 
+            })
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                let audioPlayer = document.getElementById('audioPlayer3');
+
+                clearInterval(intervalId);
+                loadingDiv.style.display = 'none';
+                audioPlayer.src = url;
+                audioPlayer.load(); 
+                audioPlayer.style.display = "block";
+                audioPlayer.play();   
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                loadingDiv.style.display = 'none';
+
+                alert('An error occurred while uploading the file.');
+            });
+        }
+        function submitText(textInput) {
+            let voice_id = localStorage.getItem("voiceId") || "1phcQr0yHM1gzhGNly0b";
+            
+            let loadingDiv = document.getElementById('loading');
+            if (textInput === 'I love my little pony! It is such a good show!') {
+                loadingDiv = document.getElementById('loading2');
+            }
             loadingDiv.style.display = "block";
             let dots = 0;
             const intervalId = setInterval(() => {
@@ -194,13 +270,21 @@ textarea:focus {
             })
             .then(blob => {
                 const url = URL.createObjectURL(blob);
-                const audioPlayer = document.getElementById('audioPlayer');
+                let audioPlayer = document.getElementById('audioPlayer');
+                if (audioPlayer.style.display === "block") {
+                    audioPlayer = document.getElementById('audioPlayer2');
+                    document.getElementById("taylor-step").style.display = "block"                 
+                    document.getElementById('taylor-step').scrollIntoView({ behavior: 'smooth' });
+
+                }
                 clearInterval(intervalId);
                 loadingDiv.style.display = 'none';
                 audioPlayer.src = url;
                 audioPlayer.load(); 
                 audioPlayer.style.display = "block";
                 audioPlayer.play();   
+                document.getElementById("danger-step").style.display = "block"                 
+
             })
             .catch(error => {
                 console.error('Error:', error);
