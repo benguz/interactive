@@ -133,9 +133,9 @@ textarea:focus {
         <br><audio style="display: none;" id="audioPlayer3" controls></audio>  
         <br><br><br><br>
     </div>
-    <div id="reflection">
+    <div id="reflection" style="display: none;">
         <p style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty;">How did this experience make you feel?<br>Empowering? Frightening? This cost us a fraction of a cent to set up. You could've uploaded Kanye's voice, your friend's voice, anyone's voice... and made them say anything.</p>
-
+        <a href="examples.html">see examples here</a>
     </div>
 
 
@@ -228,6 +228,8 @@ textarea:focus {
                 audioPlayer.load(); 
                 audioPlayer.style.display = "block";
                 audioPlayer.play();   
+                document.getElementById('reflection').style.display = "block";
+
             })
             .catch(error => {
                 console.error('Error:', error);
