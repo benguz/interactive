@@ -9,16 +9,19 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora&display=swap&family=Inter&display=swap" rel="stylesheet">
     <style>
         * {
-            font-family: 'inter', sans-serif;
+            font-family: 'lora', sans-serif;
+
         }
         body {
             display: flex;
             /* flex-direction: row; */
             flex-direction: column;
-
+            background: linear-gradient(180deg, #FFFAFB 25.86%, #E7B4CF 50.17%, #AA0462 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 400%
         }
         button {
             padding: 0.5em;
@@ -42,17 +45,13 @@
             width: 98%;
         }
 
-        .functions {
-            width: 50%;
-            padding-left: 2em;
-            padding-top: 1em;
+        .functions, .board-container {
+            width: 98%;
+            margin: auto;
+            padding-top: 2em;
         }
         .board-container {
-            width: 50%; 
             margin-top: 20px; 
-            padding-left: 2em;
-
-            
         }
         textarea {
    
@@ -65,6 +64,47 @@
     resize: none;          
     outline: none;          
     transition: border-color 0.2s, box-shadow 0.2s; 
+}
+
+h1, h2, p, textarea, .board-container, ul {
+    width: 70%;
+    margin: auto;
+}
+
+li p {
+    width: 100%;
+}
+
+h1 {
+    font-size: 22pt;
+}
+
+p, textarea, button, input, a, ul, li {
+
+    font-family: 'inter', sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+a:hover {
+    color: rgb(52, 52, 198);
+}
+
+.parent {
+    width: 70%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 2px;
+}
+
+.input-content {
+    width: min-content;
+    display: flex; flex-direction: row; 
+    align-items: center; justify-content: center; 
+    background-color: white; border-radius: 4px; padding: 6px;             
+    box-shadow: 0px 5px 15px rgba(94, 94, 94, 0.15); 
 }
 
 textarea:focus {
@@ -93,39 +133,51 @@ textarea:focus {
     </style>
 </head>
 <body>
+    <div class="nav" style="width: fit-content; margin: auto; display: flex; justify-content: center; margin-top: 1em;">
+        <p><a href="/">Home</a>&nbsp;&nbsp;</p>
+        
+        <p><a href="concerns.html">Concerns</a>&nbsp;&nbsp;</p>
+        <p><a href="copyright.html">Copyright</a>&nbsp;&nbsp;</p>
+        <p><a href="examples.html">Artists</a>&nbsp;&nbsp;</p>
+    </div>
     <div class="functions">
-        <h1 style="margin-bottom: 6px; text-wrap: balance;">Voice cloning is real for all of us. How would it make you feel? </h1>
-        <h2 style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty;">Make a one-minute voice recording and upload below</h2>
-        <div style="width: min-content; display: flex; flex-direction: row; align-items: center; justify-content: center; background-color: white; border-radius: 4px; padding: 6px;             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15); ">
-            <input type="file" id="audioInput" accept=".wav, .mp3" style="margin-left: 6px;">
-            <button style="align-self: baseline; vertical-align: middle; margin: 6px;" onclick="uploadAudio()">Upload</button>     
-            <div id="loadingUpload" style="display: none; text-align: left; font-size: 10pt; color: grey">Loading</div>
-       
+        <h1><i>Voice Cloning</i> (n.)<br>Artificial intelligence that enables <span style="    background: -webkit-linear-gradient(180deg, #df519d 0%, #AA0462 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;">replication of a voice, speech patterns, and cadence</span> based on audio data.</h1>
+        <br>
+        <h1 style="margin-bottom: 6px; text-wrap: balance; margin-top: 10px;">Voice cloning is real for all of us. How would it make you feel? </h1>
+        <p style="color: gray; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty;">Make a one-minute voice recording and upload below</p>
+        <div class="parent">
+            <div class="input-content" >
+                <input type="file" id="audioInput" accept=".wav, .mp3">
+                <button style="align-self: baseline; vertical-align: middle; margin: 6px;" onclick="uploadAudio()">Upload</button>     
+                <div id="loadingUpload" style="display: none; text-align: left; font-size: 10pt; color: grey">Loading</div>
+            </div>
         </div>
-        <p style="color: grey; font-size: 10pt">say anything, but talk for the full minute - this trains an AI to speak like you</p>
+        <p style="color: gray; font-size: 10pt">say anything, but talk for the full minute - this trains an AI to speak like you</p>
     </div>
     
     <div class="board-container"  id="next-steps" style="display: none">
-    <p style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty;">Enter anything - you'll hear your voice read it.</p>
-            <textarea id="text-to-speech" placeholder="your text here"></textarea>
+    <p style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty; width: 100%">Enter anything - you'll hear your voice read it.</p>
+            <textarea id="text-to-speech" placeholder="your text here"></textarea><br>
             <button onclick="submitText(document.getElementById('text-to-speech').value)" style="margin-left: 0">Submit</button> 
             <div id="loading" style="display: none; text-align: left; font-size: 10pt; color: grey">Loading</div>
             <br><audio style="display: none;" id="audioPlayer" controls></audio>           
     </div>
     <br>
     <div  class="board-container"  id="danger-step" style="display: none">
-        <p style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty;">This time, we choose what your voice will say. Don't worry - it'll be light, uncontroversial, and we never see or save the result.</p>
-        <p style="color: grey; font-size: 10pt; margin-top: 0;">this is a fraction of the risk this technology has for music.</p>
+        <p style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty; width: 100%">This time, we choose what your voice will say. Don't worry - it'll be light, uncontroversial, and we never see or save the result.</p>
+        <p style="color: grey; font-size: 10pt; margin-top: 0; width: 100%">Can you imagine the risk this technology might have for music artists?</p>
 
-        <button onclick="submitText('I love my little pony! It is such a good show!')" style="margin-left: 0">Generate new text</button> 
+        <button onclick="submitText('I love my little pony! It is such a good show!')" style="margin-left: 0;">Generate new text</button> 
         <div id="loading2" style="display: none; text-align: left; font-size: 10pt; color: grey">Loading</div>
 
         <br><audio style="display: none;" id="audioPlayer2" controls></audio>  
         <br><br><br><br>
     </div>
     <div  class="board-container"  id="taylor-step" style="display: none">
-        <p style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty;">Ever wondered what you sound like singing taylor swift? We uploaded her vocals to the API and will mix them with your voice.</p>
-        <p style="color: grey; font-size: 10pt; margin-top: 0">Optionally, you can re-record a more musical version of your voice (singing for a minute) to get better results. Scroll back up, select a new file, hit upload, and come back here!</p>
+        <p style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty; width: 100% ">Ever wondered what you sound like singing taylor swift? We uploaded her vocals to the API and will mix them with your voice.</p>
+        <p style="color: grey; font-size: 10pt; margin-top: 0; width: 100%">Optionally, you can re-record a more musical version of your voice (singing for a minute) to get better results. Scroll back up, select a new file, hit upload, and come back here!</p>
 
         <button onclick="playTaylor()" style="margin-left: 0">Sing '22'</button> 
         <div id="loadingTaylor" style="display: none; text-align: left; font-size: 10pt; color: grey">Loading</div>
@@ -134,8 +186,41 @@ textarea:focus {
         <br><br><br><br>
     </div>
     <div id="reflection" style="display: none;">
-        <p style="color: grey; margin-top: 0; font-size: 16pt; font-weight: 400; text-wrap: pretty;">How did this experience make you feel?<br>Empowering? Frightening? This cost us a fraction of a cent to set up. You could've uploaded Kanye's voice, your friend's voice, anyone's voice... and made them say anything.</p>
-        <a href="examples.html">see examples here</a>
+        <p><span style="font-size:11pt;">How did this experience make you feel? Check out this list of questions to aid in your reflection.&nbsp;</span></p>
+        <p><br></p>
+        <p><span style="font-size:15pt;">Questions:</span></p>
+        <ul>
+            <li style="list-style-type:disc;font-size:11pt;">
+                <p><span style="font-size:11pt;">What values do you hold when it comes to music?</span></p>
+            </li>
+            <li style="list-style-type:disc;font-size:11pt;">
+                <p><span style="font-size:11pt;">What has informed your values towards music?</span></p>
+            </li>
+            <li style="list-style-type:disc;font-size:11pt;">
+                <p><span style="font-size:11pt;">What do you get out of listening to music? What experience do you hope to have?</span></p>
+            </li>
+            <li style="list-style-type:disc;font-size:11pt;">
+                <p><span style="font-size:11pt;">Is music meaningful to you? If so, what makes music meaningful to you?</span></p>
+            </li>
+            <li style="list-style-type:disc;font-size:11pt;">
+                <p><span style="font-size:11pt;">Prior to listening to the AI song, what were you expecting?</span></p>
+            </li>
+            <li style="list-style-type:disc;font-size:11pt;">
+                <p><span style="font-size:11pt;">What are your preconceived notions of AI?</span></p>
+            </li>
+            <li style="list-style-type:disc;font-size:11pt;">
+                <p><span style="font-size:11pt;">What was your initial reaction to hearing the song?</span></p>
+            </li>
+            <li style="list-style-type:disc;font-size:11pt;">
+                <p><span style="font-size:11pt;">How did you feel while listening to it? Come up with a few adjectives.&nbsp;</span></p>
+            </li>
+            <li style="list-style-type:disc;font-size:11pt;">
+                <p><span style="font-size:11pt;">Did you have any bodily reactions while listening to the music? Did you shift your face or body?</span></p>
+            </li>
+        </ul>
+        <p><br></p>
+        <p><span style="font-size:11pt;">This cost us a fraction of a cent to set up. And you could use anyone&rsquo;s voice to say or sing anything. <a href="concerns.html" style="text-decoration: underline;">Click here</a> to find out how these tools might affect the music industry and cultural practice that heavily rely on the human voice.</span></p>
+        <br><br><br><br><br><br>
     </div>
 
 

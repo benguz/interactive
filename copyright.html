@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI & Music, Reese & Ben</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'inter', sans-serif;
+        }
+        body {
+            display: flex;
+            /* flex-direction: row; */
+            flex-direction: column;
+            background: linear-gradient(180deg, #FFFAFB 25.86%, #E7B4CF 50.17%, #AA0462 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 400%
+
+        }
+        .blog {
+            margin-top: 1em;
+        }
+        .blog p {
+            width: 60%;
+            margin: auto;
+            line-height: 1.46;
+        }
+
+        .blog h2 {
+            width: 80%;
+            text-align: center;
+            line-height: 1.6;
+            font-family: 'lora', serif;
+            font-size: 22pt;
+            margin: auto;
+            cursor: pointer;
+            transition: color 0.3s ease-in;
+        }
+        .blog h2:hover {
+            color: rgba(120, 183, 220, 1);
+
+        }
+        button {
+            padding: 0.5em;
+            background-color: rgba(120, 183, 220, 0.6);
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+            margin: 6px;
+            margin-bottom: 2px;
+            margin-top: 10px;
+            
+        }
+        button:hover {
+            background-color: rgba(120, 183, 220, 1);
+            cursor: pointer;
+        }
+        .texting body {
+  font-family: helvetica;
+  display: flex ;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chat {
+  width: 400px;
+  max-width: 100%;
+  border: solid 1px #EEE;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  margin: auto;
+}
+
+.messages {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  border-radius: 20px;
+  padding: 8px 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: inline-block;
+  text-align: left;
+}
+
+.yours {
+  align-items: flex-start;
+}
+
+.yours .message {
+  margin-right: 25%;
+  background-color: #eee;
+  position: relative;
+}
+
+.yours .message.last:before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  bottom: 0;
+  left: -7px;
+  height: 20px;
+  width: 20px;
+  background: #eee;
+  border-bottom-right-radius: 15px;
+}
+.yours .message.last:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  left: -10px;
+  width: 10px;
+  height: 20px;
+  background: #f5f5f5;
+  border-bottom-right-radius: 10px;
+}
+
+.mine {
+  align-items: flex-end;
+}
+
+.mine .message {
+  color: white;
+  margin-left: 25%;
+  background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
+  background-attachment: fixed;
+  position: relative;
+}
+
+.mine .message.last:before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  bottom: 0;
+  right: -8px;
+  height: 20px;
+  width: 20px;
+  background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
+  background-attachment: fixed;
+  border-bottom-left-radius: 15px;
+}
+
+
+.mine .message.last:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  right: -10px;
+  width: 10px;
+  height: 20px;
+  background: #f5f5f5;
+  border-bottom-left-radius: 10px;
+}
+        @media screen and (max-width: 720px) {
+            .blog p, .blog h2 {
+                width: 98%;
+            }
+        
+        }
+
+        
+.accordion-menu {
+  width: 70%;
+  margin: auto;
+}
+
+.accordion-section {
+  border: 2px dotted hsl(170, 75%, 41%);
+  border-bottom: none;
+}
+
+.last {
+  border-bottom: 2px dotted hsl(170, 75%, 41%);
+}
+
+.accordion-header {
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #333;
+  background-color: white;
+  position: relative;
+}
+
+.accordion-header:after {
+  content: '\25BC';
+  position: absolute;
+  color: hsl(170, 75%, 41%);
+  right: 10px;
+}
+
+.accordion-header.active:after {
+  color: hsl(170, 75%, 41%);
+  content: '\25B2';
+}
+
+.accordion-content {
+  padding: 10px;
+  display: none;
+  background-color: #fff;
+}
+
+.accordion-content p {
+  font-size: 12pt;
+  width: 100%;
+}
+
+@media screen and (max-width: 600px) {
+  .accordion-menu {
+    max-width: 100% - 20px;
+  }
+
+  .accordion-menu p {
+    /* ADD STYLES FOR MOBILE */
+  }
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="nav" style="width: fit-content; margin: auto; display: flex; justify-content: center; margin-top: 1em;">
+        <p><a href="/">Home</a>&nbsp;&nbsp;</p>
+        
+        <p><a href="concerns.html">Concerns</a>&nbsp;&nbsp;</p>
+        <p><a href="copyright.html">Copyright</a>&nbsp;&nbsp;</p>
+        <p><a href="examples.html">Artists</a>&nbsp;&nbsp;</p>
+    </div>
+        
+        <div class="chat" style="width: 50%;" >
+            <div class="mine messages">
+                <div class="message">
+                    I think it’s cool to be fused w a machine and I like the idea of open sourcing all art and killing copyright. 
+                                    </div>
+                <div class="message">
+                    I’ll split 50% royalties on any successful AI generated song that uses my voice                </div>
+              <div class="message last">                
+                Same deal as I would with any artist i collab with. Feel free to use my voice without penalty. I have no label and no legal bindings.
+            </div>
+            <p class="title" style="text-align: right;">- <a style="font-family: inherit;" href="https://www.billboard.com/lists/artificial-intelligence-ai-music-stars-speaking-out/liam-gallagher/">Grimes <img width="24px" height="24px" style="border-radius: 12px; vertical-align: text-bottom;" src="images/grimes.jpg"></a></p>
+
+            </div>
+            </div>
+            <div class="blog">
+              <p><strong> Food for thought: </strong>Music is a strong social and cultural force among frontier artists who will not be held back from creative expressions despite established social norms [Menell]. In the face of copyright laws which fail to embrace, accept, and/or understand this reality, such laws will become increasingly unpopular with certain demographics [Menell]. This lack of support for copyright laws could threaten the economic well-being of lesser known or privileged artists who rely on these laws to ensure their economic well being. 
+            
+              </p> </div>
+            <div class="chat" style="width: 50%;" >
+            <div class="yours messages">
+              <div class="message">
+                Holly+ is Holly Herndon’s digital twin. 
+              </div>
+              <div class="message last">
+                She is using machine learning to create freely available online instruments and tools that encourage anyone to create art with her AI voice and image, as part of an expansive art and research project experimenting with the economy around her digital likeness.              </div>
+
+              <p class="title" style="text-align: left;">- <a style="font-family: inherit;" href="https://ars.electronica.art/planetb/en/holly-plus/">Holly Herndon <img width="24px" height="24px" style="border-radius: 12px; vertical-align: text-bottom;" src="images/holly.jpg"></a></p>
+            </div>
+        </div>
+        <div class="blog">
+            <p><strong> Food for thought: </strong>Members of a relevant social group may seek creative solutions to counter the issues presented by the dominant social interpretation. Thus interpretive flexibility is re-established.  
+          
+            </p> </div>
+        <div class="blog">
+
+        <h2>
+            Click on each of these tiles to learn about the AI voice cloning’s implications for copyright! 
+
+        </h2>
+        <div class="accordion-menu">
+            <div class="accordion-section">
+              <div class="accordion-header">What rights does a person have to their voice? 
+            </div>
+              <div class="accordion-content">
+                <p>In the 1988 case Midler vs Ford Motor co., the United States Court of Appeals for the Ninth Circuit decided that a voice is inherently uncopyrightable and intellectual property protections do not extend to ownership of a voice since the voice is not fixed in a tangible medium of expression as required by the statute. 
+
+                    In this case, singer Bette Midler had brought Ford Motor co. to court over using an impersonator of her distinct, recognizable, and marketable voice in a highly successful commercial without compensation. Though the court acknowledged the distinctness and fundamental role voice plays in the identity of an individual, it concluded that "mere imitation of a recorded performance would not constitute a copyright infringement even where one performer deliberately sets out to simulate another's performance as exactly as possible." In consequence, individuals who have been voice copied or cloned have not been able to use copyright to ensure protection or recompense no matter the mechanism of replication. 
+                    [Wells-Edwards]</p>
+              </div>
+            </div>
+            <div class="accordion-section">
+                <div class="accordion-header">            Can more general identity protections prevent voice cloning?
+
+              </div>
+                <div class="accordion-content">
+                  <p>The right of publicity provides intellectual property protection against the misappropriation of a person’s name, likeness, or other component personal identity for commercial benefit. Though the laws detailing the right of publicity varies state by state, these protections will still generally only be applicable to well-known celebrities and public figures in limited cases. Firstly, there exists the implication in the law that the subject of the voice cloning has an identity worth appropriating. Therefore lesser-known vocalists are left vulnerable. Secondly, the right of publicity protections only extends as far as is necessary to encourage entertainment, much in the same manner as patents. It is there to allow the performer to reap the rewards of their efforts with little care for the feelings or reputation of the performer. Therefore while this might provide an avenue for recompense if proof that the cloner has benefited from the appropriation is presented, the ethical and legal concerns of the creation of the clone in the first place is left unaddressed. Certainly, vocalistis should be compensated if their unique voices are utilized to train and produce goods provided by AI voice cloning technology companies. 
+                </p>
+                </div>
+              </div>
+            <div class="accordion-section last">
+                <div class="accordion-header">How can advancements in voice cloning inform new laws?
+                </div>
+                <div class="accordion-content">
+                  <p>Alteration of copyright laws is necessary in order for vocal artists, known and unknown alike, to receive protection for their livelihoods and reap the benefits of the styles and skills that have curated throughout their endeavors. At the same time, vocal cloning must be recognized as an important and emerging tool for creativity and free expression. Moving forward, the state must carefully consider its role as a regulator and the various social interpretations of the technology as it re-examines and develops laws. 
+                </p>
+                  <p>Tennessee has been an early leader in this regard with the development of the Ensuring Likeness Voice and Image Security (ELVIS) Act. This bill updates Tennessee’s Protection of Personal Rights law to specifically include impersonations of voice using AI. This reality reflects how AI has disrupted the stabilized interpretation of tools of voice mimicry in the music industry, disruption which will occur throughout the United States and the world. </p>
+                  <p>A new period of interpretation is developing and we must wait to see how it stabilizes and closes. Key to this idea, though, is that the state can help shape the stabilization of this new interpretation to ensure the best interests of the various stakeholders. 
+                </p>
+             </div>
+              </div>
+            </div>
+<br>
+            <p>Want to <a href="/examples.html">hear from the artists themselves</a>?</p>
+</div>
+<br><br><br><br><br>
+<br><br><br><br><br>
+<br><br><br><br><br>
+
+  <script>
+
+$(document).ready(function() {
+  // Delegate events from the body element
+  $('body').on('click', '.accordion-header', function() {
+    var content = $(this).next('.accordion-content');
+
+    // If this section is already open, close it
+    if($(this).hasClass('active')) {
+      content.slideUp();
+      $(this).removeClass('active');
+    } else {
+      // Close all sections
+      $('.accordion-content').slideUp();
+      $('.accordion-header').removeClass('active');
+
+      // Open this section
+      content.slideDown();
+      $(this).addClass('active');
+    }
+  });
+});
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI & Music, Reese & Ben</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora&display=swap&family=Inter&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'lora', sans-serif;
+
+        }
+        body {
+            display: flex;
+            /* flex-direction: row; */
+            flex-direction: column;
+            background: linear-gradient(180deg, #FFFAFB 25.86%, #E7B4CF 50.17%, #AA0462 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 400%
+        }
+        button {
+            padding: 0.5em;
+            background-color: rgba(120, 183, 220, 0.6);
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+            margin: 6px;
+            margin-bottom: 2px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: rgba(120, 183, 220, 1);
+            cursor: pointer;
+        }
+        input[type="text"] {
+            border: 2px solid #ccc; 
+            padding: 8px; 
+            border-radius: 4px;
+            margin: auto; max-width: 100%;
+            width: 98%;
+        }
+
+        .functions, .board-container {
+            width: 98%;
+            margin: auto;
+            padding-top: 2em;
+        }
+        .board-container {
+            margin-top: 20px; 
+        }
+        textarea {
+   
+    height: 100px;  
+    width: 95%;       
+    padding: 5px;
+    box-sizing: border-box; 
+    border: 1px solid #ccc; 
+    border-radius: 4px;
+    resize: none;          
+    outline: none;          
+    transition: border-color 0.2s, box-shadow 0.2s; 
+}
+
+h1, h2, p, textarea, .board-container {
+    width: 70%;
+    margin: auto;
+}
+
+h1 {
+    font-size: 22pt;
+}
+
+p, textarea, button, input, a {
+
+    font-family: 'inter', sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+a:hover {
+    color: rgb(52, 52, 198);
+}
+
+.parent {
+    width: 70%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 2px;
+}
+
+.input-content {
+    width: min-content;
+    display: flex; flex-direction: row; 
+    align-items: center; justify-content: center; 
+    background-color: white; border-radius: 4px; padding: 6px;             
+    box-shadow: 0px 5px 15px rgba(94, 94, 94, 0.15); 
+}
+
+textarea:focus {
+    border-color: #0056b3;   /* Change border color on focus */
+    box-shadow: 0 0 8px rgba(0, 86, 179, 0.25); /* Subtle shadow on focus */
+}
+        @media screen and (max-width: 720px) {
+            body {
+                flex-direction: column;
+                
+            }
+            .functions {
+                width: 98%;
+                padding: 0;
+                margin: auto;
+            }
+            .board-container {
+                width: 98%;
+                max-width: 100%;
+            }
+            #fenInput {
+                width: 90%;
+            }
+        }
+
+        p {
+            font-size: 13pt;
+            line-height: 1.5
+
+        }
+
+        
+.accordion-menu {
+  width: 70%;
+  margin: auto;
+}
+
+.accordion-section {
+  border: 2px dotted hsl(170, 75%, 41%);
+  border-bottom: none;
+}
+
+.last {
+  border-bottom: 2px dotted hsl(170, 75%, 41%);
+}
+
+.accordion-header {
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #333;
+  background-color: white;
+  position: relative;
+}
+
+.accordion-header:after {
+  content: '\25BC';
+  position: absolute;
+  color: hsl(170, 75%, 41%);
+  right: 10px;
+}
+
+.accordion-header.active:after {
+  color: hsl(170, 75%, 41%);
+  content: '\25B2';
+}
+
+.accordion-content {
+  padding: 10px;
+  display: none;
+  background-color: #fff;
+}
+
+.accordion-content p {
+  font-size: 12pt;
+  width: 100%;
+}
+
+@media screen and (max-width: 600px) {
+  .accordion-menu {
+    max-width: 100% - 20px;
+  }
+
+  .accordion-menu p {
+    /* ADD STYLES FOR MOBILE */
+  }
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="nav" style="width: fit-content; margin: auto; display: flex; justify-content: center; margin-top: 1em;">
+        <p><a href="/">Home</a>&nbsp;&nbsp;</p>
+        
+        <p><a href="concerns.html">Concerns</a>&nbsp;&nbsp;</p>
+        <p><a href="copyright.html">Copyright</a>&nbsp;&nbsp;</p>
+        <p><a href="examples.html">Artists</a>&nbsp;&nbsp;</p>
+    </div>
+    <div class="functions">
+        <p>AI has been increasingly used in music production, distribution, and creation since it was first tested out in the 1950s [Brown]. However, recent developments in AI technology and copyright law have renewed questions about the appropriate use of AI in music. Voice-cloning has been a particularly contentious issue as artists large and small confront technology companies over their rights to protection and compensation. By walking you through the concerns shared by music artists, the current theoretical and applied states of copyright laws on voice, and providing the opportunity to experience voice cloning for yourself, this interactive project aims to convey the need for updated legal protections on an artist’s voice and an ethical standard for the training data used by AI tech companies. </p>
+        <br>
+        <p>The plight of the vocalist as AI voice cloning grows is two-fold. For one, artists feel a more personal threat to their autonomy, dignity, and reputation [Antifos, Fekadu]. On the other side, artists grow concerned over the economic threat of AI [Chow, Hammond, Berry].  Explore the information below for an expanded explanation of how these threats come into being. </p>
+    
+    </div>
+    <div class="functions">
+        <h2>Personal Threat</h2>
+    </div>
+    <div class="accordion-menu">
+        <div class="accordion-section">
+          <div class="accordion-header">Appropriating a deeply personal quality
+        </div>
+          <div class="accordion-content">
+            <p>The voice is a profoundly personal aspect of one’s identity [Wells-Edwards]. For the majority of the population it is the core medium of self expression, therefore to have one’s voice appropriated or ‘stolen’ is a violation of one’s essential boundaries of autonomy [Nathanson].</p>
+          </div>
+        </div>
+        <div class="accordion-section last">
+            <div class="accordion-header">No rest for the weary
+          </div>
+            <div class="accordion-content">
+              <p>Even after passing, artists can be “resurrected” to perform once again. This can be disturbing for individuals hold the memory of artists as sacred and prefer to let the dead rest. 
+            </p>
+            </div>
+          </div>
+          </div>
+          <div class="functions">
+            <h2>Economic Threat</h2>
+        </div>
+          <div class="accordion-menu">
+            <div class="accordion-section">
+              <div class="accordion-header">Rapidly produced competition
+            </div>
+              <div class="accordion-content">
+                <p>Vocal tracks can be created at a much more rapid pace which can, in many cases, compete with the original work of the artist. [Chow]</p>
+              </div>
+            </div>
+        <div class="accordion-section last">
+            <div class="accordion-header">Use without compensation
+            </div>
+            <div class="accordion-content">
+              <p>Voice clones of well-known celebrities have been created by training models on audio content of the original person without her permission [Chow].  
+            </p>
+              
+         </div>
+          </div>
+        </div>
+        <br><br><br><br><br>
+<br><br><br><br><br>
+<br><br><br><br><br>
+
+        <script>
+            
+$(document).ready(function() {
+  // Delegate events from the body element
+  $('body').on('click', '.accordion-header', function() {
+    var content = $(this).next('.accordion-content');
+
+    // If this section is already open, close it
+    if($(this).hasClass('active')) {
+      content.slideUp();
+      $(this).removeClass('active');
+    } else {
+      // Close all sections
+      $('.accordion-content').slideUp();
+      $('.accordion-header').removeClass('active');
+
+      // Open this section
+      content.slideDown();
+      $(this).addClass('active');
+    }
+  });
+});
+        </script>
+    </body>
+    </html>

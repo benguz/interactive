@@ -18,10 +18,13 @@
             display: flex;
             /* flex-direction: row; */
             flex-direction: column;
+            background: linear-gradient(180deg, #FFFAFB 25.86%, #E7B4CF 50.17%, #AA0462 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 400%
 
         }
         .blog {
-            margin-top: 2em;
+            margin-top: 1em;
         }
         .blog p {
             width: 60%;
@@ -58,6 +61,108 @@
             background-color: rgba(120, 183, 220, 1);
             cursor: pointer;
         }
+        .texting body {
+  font-family: helvetica;
+  display: flex ;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chat {
+  width: 400px;
+  max-width: 100%;
+  border: solid 1px #EEE;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  margin: auto;
+}
+
+.messages {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  border-radius: 20px;
+  padding: 8px 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: inline-block;
+  text-align: left;
+}
+
+.yours {
+  align-items: flex-start;
+}
+
+.yours .message {
+  margin-right: 25%;
+  background-color: #eee;
+  position: relative;
+}
+
+.yours .message.last:before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  bottom: 0;
+  left: -7px;
+  height: 20px;
+  width: 20px;
+  background: #eee;
+  border-bottom-right-radius: 15px;
+}
+.yours .message.last:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  left: -10px;
+  width: 10px;
+  height: 20px;
+  background: #f5f5f5;
+  border-bottom-right-radius: 10px;
+}
+
+.mine {
+  align-items: flex-end;
+}
+
+.mine .message {
+  color: white;
+  margin-left: 25%;
+  background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
+  background-attachment: fixed;
+  position: relative;
+}
+
+.mine .message.last:before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  bottom: 0;
+  right: -8px;
+  height: 20px;
+  width: 20px;
+  background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
+  background-attachment: fixed;
+  border-bottom-left-radius: 15px;
+}
+
+
+.mine .message.last:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  right: -10px;
+  width: 10px;
+  height: 20px;
+  background: #f5f5f5;
+  border-bottom-left-radius: 10px;
+}
         @media screen and (max-width: 720px) {
             .blog p, .blog h2 {
                 width: 98%;
@@ -68,8 +173,15 @@
     </style>
 </head>
 <body>
+    <div class="nav" style="width: fit-content; margin: auto; display: flex; justify-content: center; margin-top: 1em;">
+        <p><a href="/">Home</a>&nbsp;&nbsp;</p>
+        
+        <p><a href="concerns.html">Concerns</a>&nbsp;&nbsp;</p>
+        <p><a href="copyright.html">Copyright</a>&nbsp;&nbsp;</p>
+        <p><a href="examples.html">Artists</a>&nbsp;&nbsp;</p>
+    </div>
     <div class="blog">
-        <h2 onclick="playMusic('drake.mp3')">“Heart on My Sleeve” - AI trained on Drake's voice (click here to play)</h2>
+        <h2 onclick="playMusic('drake.mp3')">“Heart on My Sleeve” - AI trained on Drake's voice <br>(click here to play/pause)</h2>
         <p><strong>Description:</strong> Song replicating the styles and voices of Drake and The Weeknd<br>
             
             <strong>Extent of AI Involvement:</strong> Created by a human composer, but realized using AI<br>
@@ -79,13 +191,88 @@
 
         </div>
 
-        
+
+    <div class="chat" id="mild-chat">
+        <div class="mine messages">
+            <div class="message">                ...I think that is a weapon and a tool that can be scary. I think it’s going to be great for a lot of things, like science and medicine and many, many things, but not to replace human beings. That scares me to death.
+            </div>
+            <div class="message">
+                That’s like the mark of the beast. It’s like you can’t remake a person. I don’t want that. I want to just leave a body of work behind. I think all this stuff can be great, used in the right way. 
+            </div>
+          <div class="message last">                
+            But not to replace voices and writings and not to replace a human being that belongs to God.
+        </div>
+        <p class="title" style="text-align: right;">- <a style="font-family: inherit;" href="https://www.hollywoodreporter.com/news/general-news/dolly-parton-interview-new-album-rockstar-superbowl-halftime-show-1235634785/">Dolly Parton <img width="24px" height="24px" style="border-radius: 12px; vertical-align: text-bottom;" src="images/dolly.jpg"></a></p>
+
+        </div>
+        <div class="yours messages">
+          <div class="message">
+            What I don’t understand about AI is, for the last 60 years, Hollywood movies have been telling you, ‘Don’t do it.’ And now everyone’s doing it…
+          </div>
+          <div class="message">
+            Have you not seen the movies where they kill us all? …I just don’t know why you need it – if you’re taking a job away from a human being, I think that’s probably a bad thing. The whole point of society is we all do jobs. 
+          </div>
+          <div class="message last">
+            If everything is done by robots, everybody’s gonna be out of work. I just find AI a bit weird.”
+          </div>
+          <p class="title" style="text-align: left;">- <a style="font-family: inherit;" href="https://www.billboard.com/lists/artificial-intelligence-ai-music-stars-speaking-out/ed-sheeran-2/">Ed Sheeran <img width="24px" height="24px" style="border-radius: 12px; vertical-align: text-bottom;" src="images/dolly.jpg"></a></p>
+
+        </div>
+       
+            
+            <div class="mine messages">
+              <div class="message">
+                Someone asked me about that recently. 
+              </div>
+              <div class="message">
+                And they were trying to tell me that AI could make a voice that sounds just like me. But it’s not me, because I’m amazing. 
+              </div>
+              <div class="message last">
+                I’m like, is this AI thing going to be amazing too? Because I am naturally, organically amazing. I’m one of a kind. So actually, I would love to see that thing try to duplicate this motherf–ker.
+               </div>
+               <p class="title" style="text-align: right;">- <a style="font-family: inherit;" href="https://www.billboard.com/lists/artificial-intelligence-ai-music-stars-speaking-out/ed-sheeran-2/">Lil Wayne <img width="24px" height="24px" style="border-radius: 12px; vertical-align: text-bottom;" src="images/dolly.jpg"></a></p>
+
+               </div>
+    </div>
+        <div class="blog">
+
+        <h2>
+            Key takeaways:
+
+        </h2>
+        <p><strong>CREATIVITY: 
+            </strong>
+            Artists believe AI can sabotage or enable creativity depending on its use. 
+            </p>
+            <p><strong>PROTECTION:
+            </strong>
+            AI is a threat to the privacy, identity, music, and livelihood of artists. 
+        </p>
+            <p><strong>COMPENSATION: 
+            </strong>
+            Dilution of the royalty pool, degradation of the value of work, lack of fair compensation, and the undermining of rights holders is echoed throughout the letter. </p>
+            </p>
+        <h2>
+            Is it all bad?</h2>
+            <p>
+Music has been used at various stages of music creation, production, and distribution throughout the past several decades. Putting much of that aside, let us narrow our scope to the effects of vocal cloning. Many of AI vocal-cloning’s determinants have been listed above and are important to reckon with as copyright legislation is updated. However, the benefits of the technology must also be taken into consideration in order to achieve fair and balanced rule of law. <a href="copyright.html">Explore the information here</a> to hear some of the arguments that exist for the right of AI voice-cloning to be available. 
+</p>
+</div>
+<br><br><br><br><br>
   <script>
-    function playMusic(filename){
-  var music = new Audio(filename);
-  music.play();
-  document.getElementById("playing").style.display = "block";
+ var music = null; 
+
+function playMusic(filename) {
+  if (music === null || music.paused) {
+    music = new Audio(filename);
+    music.play();
+    document.getElementById("playing").style.display = "block";
+  } else {
+    music.pause();
+    document.getElementById("playing").style.display = "none";
   }
+}
+
 
   </script>
 </body>
